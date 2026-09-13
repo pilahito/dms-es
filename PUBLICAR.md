@@ -17,7 +17,7 @@ Elige **una** de las tres vías.
 
 ```bash
 cd ~/Proyectos/dms-es
-git remote add origin https://github.com/TU_USUARIO/dms-es.git
+git remote add origin https://github.com/pilahito/dms-es.git
 git push -u origin main
 # Usuario: tu usuario de GitHub
 # Contraseña: PEGA EL TOKEN (no tu contraseña normal)

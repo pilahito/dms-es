@@ -19,7 +19,7 @@ oficial: puedes verlas con `./install.sh --audit` y enviarlas como PR.
 ## Instalación
 
 ```bash
-git clone https://github.com/TU_USUARIO/dms-es.git
+git clone https://github.com/pilahito/dms-es.git
 cd dms-es
 ./install.sh              # solo DMS (sin sudo)
 ```
