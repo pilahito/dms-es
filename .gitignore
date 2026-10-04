@@ -5,3 +5,4 @@
 aur/*/src/
 aur/*/pkg/
 aur/*/*.pkg.tar.*
+aur/*/dms-es-git/
