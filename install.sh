@@ -168,11 +168,13 @@ if os.path.exists(dc_p):
             if isinstance(obj, dict) and obj.get(term): return obj[term]
         return None
     terms = set()
-    for pat in ('Modules/Weather*', 'Modules/DankDash*', 'Widgets*', 'Modules/ControlCenter*',
-                'Modules/Settings*', 'Modules/Launcher*', 'Modules/Dock*', 'Modules/Bar*'):
-        for f in glob.glob(D + pat + '/**/*.qml', recursive=True):
-            try: terms.update(re.findall(r'I18n\.tr\("([^"]+)"', open(f, encoding='utf-8').read()))
-            except Exception: pass
+    # Se recorren TODOS los .qml del shell. Antes solo se miraban unas carpetas
+    # concretas y, por eso, las notificaciones (Current/History), el diálogo de
+    # energía (Power Saver/Performance) o el bloqueo se quedaban en inglés: su
+    # juego de traducción (DankCommon) no recibía nunca esas cadenas.
+    for f in glob.glob(D + '**/*.qml', recursive=True):
+        try: terms.update(re.findall(r'I18n\.tr\("([^"]+)"', open(f, encoding='utf-8').read()))
+        except Exception: pass
     nuevas = 0
     for t in terms:
         if isinstance(dc.get(t), dict) and dc[t].get(t): continue
