@@ -24,6 +24,13 @@
 # ═══════════════════════════════════════════════════════════════
 set -uo pipefail
 
+# ── Barrera de seguridad (no root, no arranque) ───────────────
+if [ "$(id -u)" -eq 0 ]; then
+  echo "ERROR: no ejecutes esto como root (escribiría configs de usuario como root)." >&2
+  exit 1
+fi
+# Este script NO toca kernel, GRUB, /boot ni el gestor de arranque.
+
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TR="$DIR/translations"
 BINDS_USER="$HOME/.config/hypr/dms/binds-user.lua"
@@ -46,6 +53,7 @@ for arg in "$@"; do
     --paquetes)  DO_PKGS=1 ;;
     --todo)      DO_OS=1; DO_PKGS=1 ;;
     --no-hook)   DO_HOOK=0 ;;
+    apply|--apply) ;;          # modo por defecto (compatibilidad)
     --check)     MODE="check" ;;
     --audit)     MODE="audit" ;;
     --revert)    MODE="revert" ;;
@@ -182,6 +190,11 @@ PY
       step "2/3" "Hook de arranque (para que aguante actualizaciones)…"
       mkdir -p "$HOOK_DIR" "$(dirname "$SELF_DEST")"
       cp -f "$0" "$SELF_DEST"; chmod +x "$SELF_DEST"
+      # Enlazar las traducciones junto al script instalado. El hook ejecuta
+      # $SELF_DEST, que lee "$DIR/translations": sin esto NO encuentra
+      # overrides-es.json ni extras-es.json y no traduce nada.
+      ln -sfn "$TR" "$(dirname "$SELF_DEST")/translations"
+      ok "traducciones enlazadas en $(dirname "$SELF_DEST")/translations"
       cat > "$HOOK_LUA" << EOF
 -- Reaplica el paquete de español de DMS tras cada inicio de sesión
 -- (DMS extrae su shell en /run y una actualización lo reemplaza).
