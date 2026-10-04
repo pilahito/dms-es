@@ -1,2 +1,7 @@
 *.bak
 *.bak-*
+
+# Artefactos de compilación del paquete AUR
+aur/*/src/
+aur/*/pkg/
+aur/*/*.pkg.tar.*

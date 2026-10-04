@@ -1,0 +1,23 @@
+pkgbase = dms-es-git
+	pkgdesc = Spanish translation package for DankMaterialShell (DMS) on Arch + Hyprland
+	pkgver = r5.b53a4c9
+	pkgrel = 1
+	url = https://github.com/pilahito/dms-es
+	install = dms-es-git.install
+	arch = any
+	license = MIT
+	makedepends = git
+	depends = dms-shell
+	depends = python
+	depends = jq
+	optdepends = firefox-i18n-es-es: Spanish language pack for Firefox (install.sh --todo)
+	optdepends = hunspell-es_es: Spanish spell checker (install.sh --todo)
+	optdepends = hyphen-es: Spanish hyphenation patterns (install.sh --todo)
+	optdepends = mythes-es: Spanish thesaurus (install.sh --todo)
+	optdepends = man-pages-es: Spanish man pages (install.sh --todo)
+	provides = dms-es
+	conflicts = dms-es
+	source = dms-es-git::git+https://github.com/pilahito/dms-es.git
+	sha256sums = SKIP
+
+pkgname = dms-es-git

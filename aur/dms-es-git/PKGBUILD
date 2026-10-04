@@ -1,0 +1,42 @@
+# Maintainer: pilahito <pilahito@users.noreply.github.com>
+pkgname=dms-es-git
+pkgver=r5.b53a4c9
+pkgrel=1
+pkgdesc="Spanish translation package for DankMaterialShell (DMS) on Arch + Hyprland"
+arch=('any')
+url="https://github.com/pilahito/dms-es"
+license=('MIT')
+depends=('dms-shell' 'python' 'jq')
+makedepends=('git')
+optdepends=(
+  'firefox-i18n-es-es: Spanish language pack for Firefox (install.sh --todo)'
+  'hunspell-es_es: Spanish spell checker (install.sh --todo)'
+  'hyphen-es: Spanish hyphenation patterns (install.sh --todo)'
+  'mythes-es: Spanish thesaurus (install.sh --todo)'
+  'man-pages-es: Spanish man pages (install.sh --todo)'
+)
+provides=('dms-es')
+conflicts=('dms-es')
+install="$pkgname.install"
+source=("$pkgname::git+https://github.com/pilahito/dms-es.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  printf 'r%s.%s' "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+  install -dm755 "$pkgdir/usr/share/dms-es"
+  install -m644 "$srcdir/$pkgname/README.md" "$pkgdir/usr/share/dms-es/"
+  install -Dm644 "$srcdir/$pkgname/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  cp -a "$srcdir/$pkgname/translations" "$pkgdir/usr/share/dms-es/"
+  install -m755 "$srcdir/$pkgname/install.sh" "$pkgdir/usr/share/dms-es/install.sh"
+
+  # Envoltorio en vez de symlink: el script resuelve sus rutas con
+  # BASH_SOURCE, así que un symlink rompería $DIR y no encontraría
+  # translations/.
+  install -dm755 "$pkgdir/usr/bin"
+  printf '#!/bin/sh\nexec /usr/share/dms-es/install.sh "$@"\n' > "$pkgdir/usr/bin/dms-es"
+  chmod 755 "$pkgdir/usr/bin/dms-es"
+}

@@ -1,0 +1,38 @@
+post_install() {
+  cat <<'EOF'
+==> dms-es is installed, but the translation has NOT been applied yet.
+
+    DMS keeps its interface in a per-user runtime directory
+    (/run/user/<uid>/danklinux-shell/<hash>/), so a package cannot patch it
+    for you. Run the following as your normal user (do NOT use sudo):
+
+        dms-es
+
+    If the change is not visible right away:
+
+        systemctl --user restart dms
+
+    Other options:
+        dms-es --check     status and coverage
+        dms-es --audit     list strings still in English
+        dms-es --todo      also set the system locale and language packs
+        dms-es --revert    restore DMS's original files
+EOF
+}
+
+post_upgrade() {
+  post_install
+}
+
+pre_remove() {
+  cat <<'EOF'
+==> Note: the helper this package installed into your HOME is kept:
+        ~/.config/cyberpunk/dms-es.sh  (+ its Hyprland hook)
+
+    To undo the translation itself, run as your normal user:
+
+        ~/.config/cyberpunk/dms-es.sh --revert
+
+    Reinstalling or upgrading dms-shell also restores its original files.
+EOF
+}
